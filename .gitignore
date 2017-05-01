@@ -1,1 +1,4 @@
 log.json
+env/
+config.yaml
+*.pyc

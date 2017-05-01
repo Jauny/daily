@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+import dropbox_upload
 import json
 import time
 import os
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 LOG_PATH = os.path.join(DIR_PATH, "log.json")
+BACKUP_PATH = "/log.json"
 
 
 def get_user_input(query):
@@ -23,6 +25,13 @@ def get_things(thing, i=3):
         things.append(input)
 
     return things
+
+
+def backup_to_dropbox():
+    """Backup `file` to dropbox."""
+    print "Backing up log to Dropbox..."""
+    log_file = open(LOG_PATH)
+    dropbox_upload.upload_file(log_file, BACKUP_PATH)
 
 
 def main(*args, **kwargs):
@@ -43,6 +52,9 @@ def main(*args, **kwargs):
     log = open(LOG_PATH, 'a+')
     json.dump(daily_log, log)
     log.write("\n")
+    log.close()
+
+    backup_to_dropbox()
 
 
 if __name__ == '__main__':
