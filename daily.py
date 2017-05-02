@@ -5,6 +5,9 @@ import json
 import time
 import os
 
+from dropbox_upload import MissingToken
+from dropbox.exceptions import ApiError, AuthError
+
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 LOG_PATH = os.path.join(DIR_PATH, "log.json")
 BACKUP_PATH = "/log.json"
@@ -31,7 +34,16 @@ def backup_to_dropbox():
     """Backup `file` to dropbox."""
     print "Backing up log to Dropbox..."""
     log_file = open(LOG_PATH)
-    dropbox_upload.upload_file(log_file, BACKUP_PATH)
+
+    try:
+        dropbox_upload.upload_file(log_file, BACKUP_PATH)
+    except MissingToken:
+        print "Couldn't find Dropbox token." \
+              "Make sure you have added your token into a `config.yaml` file."
+    except ApiError as e:
+        print "An error occured during upload: " + e.user_message_text
+    except AuthError as e:
+        print "It seems like your Dropbox token is invalid."
 
 
 def main(*args, **kwargs):
