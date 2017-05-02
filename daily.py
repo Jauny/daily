@@ -66,11 +66,7 @@ def main(*args, **kwargs):
     log.write("\n")
     log.close()
 
-    try:
-        backup_to_dropbox()
-    except:
-        print "Something went wrong with Dropbox updload."
-        print "Are you sure you have a valid token in config.yaml?"
+    backup_to_dropbox()
 
 
 if __name__ == '__main__':
