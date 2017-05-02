@@ -26,3 +26,20 @@ def upload_file(source_file, dest_path):
     dbx = get_dropbox_client(config.get("token"))
     dbx.files_upload(
         source_file.read(), dest_path, mode=WriteMode('overwrite', None))
+
+
+def get_token():
+    """Return token or raise MissingToken."""
+    token = config.get("token")
+    if not token:
+        raise MissingToken()
+
+    return token
+
+
+class MissingToken(Exception):
+    def __init__(self):
+        self.message = "Missing Dropbox token."
+
+    def __str__(self):
+        return repr(self.message)
